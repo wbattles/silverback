@@ -24,7 +24,7 @@ jobs:
 
       - name: Deck Diff
         run: |
-          deck gateway diff kong-conf/ \
+          deck gateway diff kong-conf/kong.yaml \
             --konnect-token="$KONNECT_TOKEN" \
             --konnect-addr="https://us.api.konghq.com" \
             --konnect-control-plane-name="test-team1"
