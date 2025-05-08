@@ -1,0 +1,36 @@
+name: Kong Configuration Deployment
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "kong-conf/**"
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Deck
+        uses: kong/setup-deck@v1
+
+      - name: Configure Deck
+        run: |
+          echo "KONG_ADMIN_URL=${{ secrets.KONG_ADMIN_URL }}" >> $GITHUB_ENV
+          echo "KONG_ADMIN_TOKEN=${{ secrets.KONG_ADMIN_TOKEN }}" >> $GITHUB_ENV
+
+      - name: Deck Diff
+        run: |
+          deck gateway diff kong-conf/ \
+            --kong-token="$KONG_ADMIN_TOKEN" \
+            --kong-addr="$KONG_ADMIN_URL" \
+            --konnect-control-plane-name="test-team1"
+
+      - name: Deck Sync
+        run: |
+          deck gateway sync kong-conf/ \
+            --kong-token="$KONG_ADMIN_TOKEN" \
+            --kong-addr="$KONG_ADMIN_URL" \
+            --konnect-control-plane-name="test-team1"
