@@ -1,10 +1,11 @@
-name: Kong Terraform Deployment
+name: Kong TF
 on:
   push:
     branches:
       - main
     paths:
       - "tf/**"
+      - ".github/workflows/deploy-tf.yaml"
 jobs:
   deploy:
     runs-on: ubuntu-latest
