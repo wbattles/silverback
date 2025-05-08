@@ -35,4 +35,17 @@ services:
     request_buffering: true
     response_buffering: true
     strip_path: false
+  - https_redirect_status_code: 426
+    name: test-item-home
+    path_handling: v0
+    paths:
+    - /add_item
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: false
   write_timeout: 60000
