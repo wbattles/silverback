@@ -20,7 +20,7 @@ jobs:
 
       - name: Configure Deck
         run: |
-          echo "KONNECT_TOKEN=${{ secrets.KONG_ADMIN_URL }}" >> $GITHUB_ENV
+          echo "KONNECT_TOKEN=${{ secrets.KONNECT_TOKEN }}" >> $GITHUB_ENV
 
       - name: Deck Diff
         run: |
