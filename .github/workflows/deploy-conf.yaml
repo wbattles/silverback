@@ -31,11 +31,11 @@ jobs:
 
       - name: Combine Kong Conf YAMLs
         run: |
-          yq eval-all 'reduce .[] as $item ({}; . * $item)' kong-conf/**/*.yaml > kong-conf/all.yaml
+          yq eval-all '. as $item ireduce ({}; . * $item )' kong-conf/**/*.yaml > kong-conf/all.yaml
 
       - name: Deck Merge
         run: |
-          yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' current.yaml kong-conf/ > merged.yaml
+          yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' current.yaml kong-conf/all.yaml > merged.yaml
 
       - name: Deck Diff
         run: |
