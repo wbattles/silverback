@@ -28,7 +28,6 @@ jobs:
             --konnect-token="$KONNECT_TOKEN" \
             --konnect-addr="https://us.api.konghq.com" \
             --konnect-control-plane-name="test-team1" \
-            --output-format=yaml
 
       - name: Deck Diff
         run: |
