@@ -36,6 +36,7 @@ jobs:
       - name: Deck Merge
         run: |
           yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' current.yaml kong-conf/all.yaml > merged.yaml
+          cat merged.yaml
 
       - name: Deck Diff
         run: |
