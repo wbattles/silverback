@@ -22,6 +22,14 @@ jobs:
         run: |
           echo "KONNECT_TOKEN=${{ secrets.KONNECT_TOKEN }}" >> $GITHUB_ENV
 
+      - name: Deck Dump
+        run: |
+          deck gateway dump --output-file=current.yaml \
+            --konnect-token="$KONNECT_TOKEN" \
+            --konnect-addr="https://us.api.konghq.com" \
+            --konnect-control-plane-name="test-team1" \
+            --output-format=yaml
+
       - name: Deck Diff
         run: |
           deck gateway diff kong-conf/ \
@@ -29,9 +37,13 @@ jobs:
             --konnect-addr="https://us.api.konghq.com" \
             --konnect-control-plane-name="test-team1"
 
+      - name: Deck Merge
+        run: |
+          yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' current.yaml kong-conf/ > merged.yaml
+
       - name: Deck Sync
         run: |
-          deck gateway sync kong-conf/ \
+          deck gateway sync merged.yaml \
             --konnect-token="$KONNECT_TOKEN" \
             --konnect-addr="https://us.api.konghq.com" \
             --konnect-control-plane-name="test-team1"
