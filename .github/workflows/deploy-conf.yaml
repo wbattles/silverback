@@ -29,16 +29,20 @@ jobs:
             --konnect-addr="https://us.api.konghq.com" \
             --konnect-control-plane-name="test-team1" \
 
+      - name: Combine Kong Conf YAMLs
+        run: |
+          yq eval-all 'reduce .[] as $item ({}; . * $item)' kong-conf/**/*.yaml > kong-conf/all.yaml
+
+      - name: Deck Merge
+        run: |
+          yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' current.yaml kong-conf/ > merged.yaml
+
       - name: Deck Diff
         run: |
           deck gateway diff kong-conf/ \
             --konnect-token="$KONNECT_TOKEN" \
             --konnect-addr="https://us.api.konghq.com" \
             --konnect-control-plane-name="test-team1"
-
-      - name: Deck Merge
-        run: |
-          yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' current.yaml kong-conf/ > merged.yaml
 
       - name: Deck Sync
         run: |
