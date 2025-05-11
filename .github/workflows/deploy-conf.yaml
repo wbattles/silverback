@@ -29,18 +29,18 @@ jobs:
             --konnect-addr="https://us.api.konghq.com" \
             --konnect-control-plane-name="test-team1" \
 
-      - name: Combine Kong Conf YAMLs
-        run: |
-          yq eval-all '. as $item ireduce ({}; . * $item )' kong-conf/**/*.yaml > kong-conf/all.yaml
+      # - name: Combine Kong Conf YAMLs
+      #   run: |
+      #     yq eval-all '. as $item ireduce ({}; . * $item )' kong-conf/**/*.yaml > kong-conf/all.yaml
 
       - name: Deck Merge
         run: |
-          yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' current.yaml kong-conf/all.yaml > merged.yaml
+          deck file merge current.yaml kong-conf/**/*.yaml -o merged.yaml
           cat merged.yaml
 
       - name: Deck Diff
         run: |
-          deck gateway diff kong-conf/ \
+          deck gateway diff merged.yaml \
             --konnect-token="$KONNECT_TOKEN" \
             --konnect-addr="https://us.api.konghq.com" \
             --konnect-control-plane-name="test-team1"

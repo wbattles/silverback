@@ -1,5 +1,1 @@
 _format_version: "3.0"
-_konnect:
-  control_plane_name: test-team1
-consumers:
-- username: test-user
