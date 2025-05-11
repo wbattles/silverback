@@ -28,7 +28,7 @@ jobs:
       #       --konnect-token="$KONNECT_TOKEN" \
       #       --konnect-addr="https://us.api.konghq.com" \
       #       --konnect-control-plane-name="test-team1" \
-      
+
       - name: Deck Merge
         run: |
           deck file merge kong-conf/**/*.yaml -o merged.yaml
@@ -47,3 +47,4 @@ jobs:
             --konnect-token="$KONNECT_TOKEN" \
             --konnect-addr="https://us.api.konghq.com" \
             --konnect-control-plane-name="test-team1"
+
