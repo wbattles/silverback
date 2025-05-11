@@ -18,10 +18,22 @@ jobs:
       - name: Setup Deck
         uses: kong/setup-deck@v1
 
-      - name: Configure Deck
+      - name: Add Konnect Token
         run: |
           echo "KONNECT_TOKEN=${{ secrets.KONNECT_TOKEN }}" >> $GITHUB_ENV
 
+      # - name: Deck Dump
+      #   run: |
+      #     deck gateway dump --output-file=current.yaml \
+      #       --konnect-token="$KONNECT_TOKEN" \
+      #       --konnect-addr="https://us.api.konghq.com" \
+      #       --konnect-control-plane-name="test-team1" \
+
+      - name: Deck Merge
+        run: |
+          deck file merge kong-conf/**/*.yaml -o merged.yaml
+          cat merged.yaml
+          
       - name: Deck Diff
         run: |
           deck gateway diff kong-conf/ \
@@ -31,7 +43,8 @@ jobs:
 
       - name: Deck Sync
         run: |
-          deck gateway sync kong-conf/ \
+          deck gateway sync merged.yaml \
             --konnect-token="$KONNECT_TOKEN" \
             --konnect-addr="https://us.api.konghq.com" \
             --konnect-control-plane-name="test-team1"
+
