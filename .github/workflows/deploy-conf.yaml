@@ -33,10 +33,10 @@ jobs:
         run: |
           deck file merge kong-conf/**/*.yaml -o merged.yaml
           cat merged.yaml
-
+          
       - name: Deck Diff
         run: |
-          deck gateway diff merged.yaml \
+          deck gateway diff kong-conf/ \
             --konnect-token="$KONNECT_TOKEN" \
             --konnect-addr="https://us.api.konghq.com" \
             --konnect-control-plane-name="test-team1"
