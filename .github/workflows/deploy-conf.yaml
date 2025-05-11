@@ -28,11 +28,7 @@ jobs:
       #       --konnect-token="$KONNECT_TOKEN" \
       #       --konnect-addr="https://us.api.konghq.com" \
       #       --konnect-control-plane-name="test-team1" \
-
-      # - name: Combine Kong Conf YAMLs
-      #   run: |
-      #     yq eval-all '. as $item ireduce ({}; . * $item )' kong-conf/**/*.yaml > kong-conf/all.yaml
-
+      
       - name: Deck Merge
         run: |
           deck file merge kong-conf/**/*.yaml -o merged.yaml
