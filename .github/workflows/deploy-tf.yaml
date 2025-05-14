@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - branch-test2
     paths:
       - "tf/**"
       - ".github/workflows/deploy-tf.yaml"
@@ -13,7 +14,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.0.0
+
+      - name: Terraform variables
+        run: |
+          echo "TF_VAR_personal_access_token=${{ secrets.KONNNECT_TOKEN }}" >> $GITHUB_ENV
+          echo "TF_VAR_control_plane_id=${{ secrets.CONTROL_PLANE_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_service_host=${{ secrets.SERVICE_HOST }}" >> $GITHUB_ENV
+
+      - name: Terraform init
+        run: |
+          terraform init
+
+      - name: Terraform plan
+        run: |
+          terraform plan
+
